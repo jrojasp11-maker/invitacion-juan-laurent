@@ -8,7 +8,7 @@ Una invitación web personalizada con experiencia de "sobre 3D" animado, selecci
 
 - **Sobre 3D interactivo** - Animación de apertura con perspectiva CSS 3D
 - **Audio de fondo** - Piano instrumental en loop (respeta políticas de autoplay)
-- **Selectores visuales** - Película (4 géneros) con feedback háptico
+- **Selectores visuales** - Película (4 géneros) y Sushi (4 tipos) con feedback háptico
 - **Botón evasivo** - El botón "No" huye del cursor/touch
 - **Confeti celebratorio** - Animación completa con canvas-confetti
 - **Persistencia Supabase** - Guarda respuestas en PostgreSQL con RLS
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS respuestas_cita (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMPTZ DEFAULT now(),
   genero_pelicula TEXT NOT NULL,
-  sushi_favorito TEXT,        -- Ya no se solicita en la app (nullable)
+  sushi_favorito TEXT NOT NULL,
   estado TEXT DEFAULT 'Aceptado'
 );
 
@@ -245,7 +245,7 @@ Edita directamente en `index.html`:
 - Cuerpo: párrafos con clase `.letter-text`
 - Firma: `<span class="signature-name">Juan</span>`
 
-### Opciones de película
+### Opciones de película/sushi
 
 Modifica los `value` y texto en los `label.option-card` del HTML.
 

@@ -23,10 +23,9 @@ CREATE TABLE IF NOT EXISTS public.respuestas_cita (
     -- Timestamp automático con zona horaria
     created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
     
-    -- Preferencia seleccionada (obligatoria)
+    -- Preferencias seleccionadas (NOT NULL = obligatorias)
     genero_pelicula TEXT NOT NULL,
-    -- Sushi ya no se solicita en la app; se deja nullable por compatibilidad
-    sushi_favorito TEXT,
+    sushi_favorito TEXT NOT NULL,
     
     -- Estado de la respuesta
     estado TEXT DEFAULT 'Aceptado' NOT NULL
@@ -167,11 +166,11 @@ ORDER BY 1 DESC;
 -- ----------------------------------------
 -- Descomenta solo para testing local:
 /*
-INSERT INTO public.respuestas_cita (genero_pelicula, estado) VALUES
-    ('Comedia', 'Aceptado'),
-    ('Sci-Fi', 'Aceptado'),
-    ('Terror', 'Aceptado'),
-    ('Drama', 'Aceptado');
+INSERT INTO public.respuestas_cita (genero_pelicula, sushi_favorito, estado) VALUES
+    ('Comedia', 'Roll Acevichado', 'Aceptado'),
+    ('Sci-Fi', 'Nigiri Salmón', 'Aceptado'),
+    ('Terror', 'Tempura', 'Aceptado'),
+    ('Drama', 'Maki Especial', 'Aceptado');
 */
 
 -- ----------------------------------------
@@ -196,11 +195,8 @@ INSERT INTO public.respuestas_cita (genero_pelicula, estado) VALUES
 -- ORDER BY total DESC;
 
 -- ----------------------------------------
--- 10. LIMPIEZA Y MIGRACIONES
+-- 10. LIMPIEZA (SOLO SI NECESITAS RESETEAR)
 -- ----------------------------------------
--- MIGRACIÓN: ejecutar SOLO si la tabla YA existía antes (sushi_favorito era NOT NULL)
--- ALTER TABLE public.respuestas_cita ALTER COLUMN sushi_favorito DROP NOT NULL;
-
 -- DROP TABLE IF EXISTS public.respuestas_cita CASCADE;
 -- DROP VIEW IF EXISTS public.v_peliculas_populares, public.v_sushi_popular, public.v_respuestas_diarias;
 -- DROP FUNCTION IF EXISTS public.hash_ip(TEXT), public.capture_request_metadata();

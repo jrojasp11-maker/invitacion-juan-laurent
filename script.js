@@ -16,7 +16,7 @@
         timing: { redirectDelay: 1500 }
     };
 
-    const state = { audioStarted: false, audioMuted: false, movieSelection: null, isSubmitting: false };
+    const state = { audioStarted: false, audioMuted: false, movieSelection: null, sushiSelection: null, isSubmitting: false };
     const elements = {};
 
     document.addEventListener('DOMContentLoaded', init);
@@ -39,7 +39,9 @@
         elements.audioIconOff = document.getElementById('audio-icon-off');
         elements.bgMusic = document.getElementById('bg-music');
         elements.movieOptions = document.getElementById('movie-options');
+        elements.sushiOptions = document.getElementById('sushi-options');
         elements.movieRadios = document.querySelectorAll('input[name="movie"]');
+        elements.sushiRadios = document.querySelectorAll('input[name="sushi"]');
         elements.acceptBtn = document.getElementById('accept-btn');
         elements.declineBtn = document.getElementById('decline-btn');
         elements.loadingModal = document.getElementById('loading-modal');
@@ -53,6 +55,7 @@
         elements.envelope.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEnvelopeClick(); }});
         elements.audioToggle.addEventListener('click', toggleAudio);
         elements.movieRadios.forEach(r => r.addEventListener('change', () => handleMovieSelect(r.value)));
+        elements.sushiRadios.forEach(r => r.addEventListener('change', () => handleSushiSelect(r.value)));
         elements.acceptBtn.addEventListener('click', handleAccept);
         elements.declineBtn.addEventListener('mouseover', handleDeclineHover);
         elements.declineBtn.addEventListener('touchstart', handleDeclineHover, { passive: true });
@@ -100,7 +103,8 @@
     function switchToLetterScreen() { elements.envelopeScreen.classList.remove('active'); elements.envelopeScreen.hidden = true; elements.letterScreen.hidden = false; elements.letterScreen.offsetHeight; elements.letterScreen.classList.add('active'); setTimeout(() => elements.movieOptions.querySelector('input')?.focus(), 300); }
 
     function handleMovieSelect(v) { state.movieSelection = v; updateAcceptBtn(); }
-    function updateAcceptBtn() { const ok = !!state.movieSelection; elements.acceptBtn.disabled = !ok; elements.acceptBtn.classList.toggle('btn-pulse', ok); }
+    function handleSushiSelect(v) { state.sushiSelection = v; updateAcceptBtn(); }
+    function updateAcceptBtn() { const ok = state.movieSelection && state.sushiSelection; elements.acceptBtn.disabled = !ok; elements.acceptBtn.classList.toggle('btn-pulse', ok); }
 
     function handleDeclineHover() {
         if (state.isSubmitting) return;
@@ -111,7 +115,7 @@
     }
 
     async function handleAccept() {
-        if (state.isSubmitting || !state.movieSelection) return;
+        if (state.isSubmitting || !state.movieSelection || !state.sushiSelection) return;
         state.isSubmitting = true;
         elements.acceptBtn.disabled = true; elements.acceptBtn.classList.remove('btn-pulse');
         elements.acceptBtn.querySelector('.btn-text').textContent = 'Guardando...';
@@ -120,19 +124,12 @@
             await saveToSupabase();
             triggerConfetti();
             setTimeout(() => { hideLoadingModal(); showThankYou(); }, CONFIG.timing.redirectDelay);
-        } catch (err) { console.error(err); hideLoadingModal(); showError(err.message || 'Error al guardar'); state.isSubmitting = false; elements.acceptBtn.disabled = false; elements.acceptBtn.classList.add('btn-pulse'); elements.acceptBtn.querySelector('.btn-text').textContent = '¡Acepto! 🎬'; }
+        } catch (err) { console.error(err); hideLoadingModal(); showError(err.message || 'Error al guardar'); state.isSubmitting = false; elements.acceptBtn.disabled = false; elements.acceptBtn.classList.add('btn-pulse'); elements.acceptBtn.querySelector('.btn-text').textContent = '¡Acepto! 🍣🎬'; }
     }
 
     async function saveToSupabase() {
         if (!supabase) throw new Error('Supabase no listo');
-        const payload = { genero_pelicula: state.movieSelection, estado: 'Aceptado' };
-        const { error } = await supabase.from('respuestas_cita').insert([payload]);
-        // Si la columna sushi_favorito sigue siendo NOT NULL (migración pendiente), se rellena con vacío
-        if (error && error.code === '23502') {
-            const { error: e2 } = await supabase.from('respuestas_cita').insert([{ ...payload, sushi_favorito: '' }]);
-            if (e2) throw new Error(e2.message);
-            return;
-        }
+        const { error } = await supabase.from('respuestas_cita').insert([{ genero_pelicula: state.movieSelection, sushi_favorito: state.sushiSelection, estado: 'Aceptado' }]);
         if (error) throw new Error(error.message);
     }
 
@@ -152,7 +149,7 @@
             <img src="lirios.jpg" alt="Ramo de lirios asiáticos Landini" class="thankyou-flowers">
             <h2>¡Invitación para Laurent! 💛</h2>
             <p>Tu respuesta quedó registrada:</p>
-            <p class="detail"><strong>Película:</strong> ${state.movieSelection}</p>
+            <p class="detail"><strong>Película:</strong> ${state.movieSelection} | <strong>Sushi:</strong> ${state.sushiSelection}</p>
             <p class="note">Juan lo verá en su panel ❤️</p>
         </div>`;
         document.body.appendChild(ov);
