@@ -11,19 +11,29 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Botón de audio flotante -->
-    <button id="audio-toggle" class="audio-toggle" aria-label="Silenciar música" title="Silenciar/Reproducir música">
-        <svg id="audio-icon-on" class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M11 5v6a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-6"></path>
-            <path d="M19 11a7 7 0 0 1 0 12"></path>
-            <path d="M22 16a10 10 0 0 1 0 12"></path>
-        </svg>
-        <svg id="audio-icon-off" class="audio-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M11 5v6a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-6"></path>
-            <line x1="23" y1="9" x2="17" y2="15"></line>
-            <line x1="17" y1="9" x2="23" y2="15"></line>
-        </svg>
-    </button>
+    <!-- Botón de audio flotante + control de volumen -->
+    <div id="audio-controls" class="audio-controls">
+        <button id="audio-toggle" class="audio-toggle" aria-label="Silenciar música" title="Silenciar/Reproducir música">
+            <svg id="audio-icon-on" class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M11 5v6a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-6"></path>
+                <path d="M19 11a7 7 0 0 1 0 12"></path>
+                <path d="M22 16a10 10 0 0 1 0 12"></path>
+            </svg>
+            <svg id="audio-icon-off" class="audio-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M11 5v6a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-6"></path>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+                <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+        </button>
+        <label class="audio-volume" for="volume-control" aria-label="Control de volumen">
+            <svg class="volume-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M11 5 6 9H2v6h4l5 4V5z"></path>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+                <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+            <input type="range" id="volume-control" class="volume-slider" min="0" max="100" value="15" aria-label="Volumen de la música">
+        </label>
+    </div>
 
     <!-- Pantalla inicial: Sobre 3D -->
     <section id="envelope-screen" class="screen active" aria-label="Sobre de invitación">
@@ -57,7 +67,7 @@
         <div class="letter-full" id="letter-full">
             <!-- Header con lirios -->
             <header class="letter-header">
-                <img src="lirios.png" alt="Ramo de lirios asiáticos Landini" class="lirios-image" id="lirios-img" loading="lazy">
+                <img src="lirios.jpg" alt="Ramo de lirios asiáticos Landini" class="lirios-image" id="lirios-img" loading="lazy">
             </header>
 
             <!-- Contenido principal -->

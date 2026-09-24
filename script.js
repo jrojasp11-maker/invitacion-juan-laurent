@@ -16,7 +16,7 @@
         timing: { redirectDelay: 1500 }
     };
 
-    const state = { audioStarted: false, audioMuted: false, movieSelection: null, sushiSelection: null, isSubmitting: false };
+    const state = { audioStarted: false, audioMuted: false, volumeWasMuted: false, movieSelection: null, sushiSelection: null, isSubmitting: false };
     const elements = {};
 
     document.addEventListener('DOMContentLoaded', init);
@@ -44,6 +44,7 @@
         elements.sushiRadios = document.querySelectorAll('input[name="sushi"]');
         elements.acceptBtn = document.getElementById('accept-btn');
         elements.declineBtn = document.getElementById('decline-btn');
+        elements.volumeControl = document.getElementById('volume-control');
         elements.loadingModal = document.getElementById('loading-modal');
         elements.errorModal = document.getElementById('error-modal');
         elements.errorMessage = document.getElementById('error-message');
@@ -60,6 +61,7 @@
         elements.declineBtn.addEventListener('mouseover', handleDeclineHover);
         elements.declineBtn.addEventListener('touchstart', handleDeclineHover, { passive: true });
         elements.errorOkBtn.addEventListener('click', hideErrorModal);
+        elements.volumeControl.addEventListener('input', handleVolumeChange);
         elements.bgMusic.addEventListener('ended', () => { if (state.audioStarted && !state.audioMuted && CONFIG.audio.loop) { elements.bgMusic.currentTime = 0; elements.bgMusic.play().catch(console.warn); }});
         elements.bgMusic.addEventListener('error', () => elements.audioToggle.style.display = 'none');
     }
@@ -74,8 +76,17 @@
 
     async function startAudio() {
         if (state.audioStarted) return;
-        try { elements.bgMusic.volume = CONFIG.audio.volume; elements.bgMusic.loop = CONFIG.audio.loop; await elements.bgMusic.play(); state.audioStarted = true; updateAudioIcon(); }
+        try { elements.bgMusic.volume = CONFIG.audio.volume; elements.bgMusic.loop = CONFIG.audio.loop; const pct = Math.round(CONFIG.audio.volume * 100); if (elements.volumeControl) { elements.volumeControl.value = pct; elements.volumeControl.style.background = 'linear-gradient(90deg, var(--color-accent) ' + pct + '%, #e0d8cc ' + pct + '%)'; } await elements.bgMusic.play(); state.audioStarted = true; updateAudioIcon(); }
         catch (e) { console.warn('Autoplay bloqueado:', e); }
+    }
+    function handleVolumeChange(e) {
+        const pct = Number(e.target.value);
+        const vol = pct / 100;
+        elements.bgMusic.volume = vol;
+        e.target.style.background = `linear-gradient(90deg, var(--color-accent) ${pct}%, #e0d8cc ${pct}%)`;
+        if (pct === 0 && !state.audioMuted) { elements.bgMusic.pause(); state.audioMuted = true; state.volumeWasMuted = true; }
+        else if (pct > 0 && state.audioMuted && state.volumeWasMuted) { elements.bgMusic.play().catch(console.warn); state.audioMuted = false; state.volumeWasMuted = false; }
+        updateAudioIcon();
     }
     function toggleAudio() { state.audioMuted ? elements.bgMusic.play().catch(console.warn) : elements.bgMusic.pause(); state.audioMuted = !state.audioMuted; updateAudioIcon(); }
     function updateAudioIcon() { elements.audioIconOn.classList.toggle('hidden', state.audioMuted || !state.audioStarted); elements.audioIconOff.classList.toggle('hidden', !(state.audioMuted || !state.audioStarted)); }
@@ -133,11 +144,17 @@
     function showThankYou() {
         const ov = document.createElement('div');
         ov.className = 'thankyou-overlay';
-        ov.innerHTML = `<div class="thankyou-content"><h2>¡Gracias, Laurent! 💛</h2><p>Tu respuesta quedó registrada:</p><p class="detail"><strong>Película:</strong> ${state.movieSelection} | <strong>Sushi:</strong> ${state.sushiSelection}</p><p class="note">Juan lo verá en su panel ❤️</p></div>`;
+        ov.innerHTML = `<div class="thankyou-content">
+            <img src="lirios.jpg" alt="Ramo de lirios asiáticos Landini" class="thankyou-flowers">
+            <h2>¡Invitación para Laurent! 💛</h2>
+            <p>Tu respuesta quedó registrada:</p>
+            <p class="detail"><strong>Película:</strong> ${state.movieSelection} | <strong>Sushi:</strong> ${state.sushiSelection}</p>
+            <p class="note">Juan lo verá en su panel ❤️</p>
+        </div>`;
         document.body.appendChild(ov);
         if (!document.getElementById('thankyou-style')) {
             const st = document.createElement('style'); st.id = 'thankyou-style';
-            st.textContent = `.thankyou-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:3000;padding:1rem;animation:fadeIn .3s}.thankyou-content{background:var(--color-paper);border-radius:var(--radius-lg);padding:2rem;max-width:400px;text-align:center;box-shadow:0 30px 60px var(--color-shadow-strong);animation:modal-pop .3s cubic-bezier(.34,1.56,.64,1)}.thankyou-content h2{font-family:var(--font-title);font-size:2rem;color:var(--color-seal);margin-bottom:1rem}.detail{font-size:1.1rem;color:var(--color-ink)!important;margin:1rem 0}.note{font-family:var(--font-title);font-size:1.3rem;color:var(--color-accent)!important}@keyframes fadeIn{from{opacity:0}to{opacity:1}}`;
+            st.textContent = `.thankyou-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:3000;padding:1rem;animation:fadeIn .3s}.thankyou-content{background:var(--color-paper);border-radius:var(--radius-lg);padding:2rem 2rem 2.5rem;max-width:420px;width:100%;text-align:center;box-shadow:0 30px 60px var(--color-shadow-strong);animation:modal-pop .3s cubic-bezier(.34,1.56,.64,1);overflow:hidden}.thankyou-flowers{width:100%;height:180px;object-fit:cover;border-radius:var(--radius-md) var(--radius-md) 0 0;margin:-2rem -2rem 1.5rem;width:calc(100% + 4rem)}.thankyou-content h2{font-family:var(--font-title);font-size:2rem;color:var(--color-seal);margin-bottom:1rem}.detail{font-size:1.1rem;color:var(--color-ink)!important;margin:1rem 0}.note{font-family:var(--font-title);font-size:1.3rem;color:var(--color-accent)!important}@keyframes fadeIn{from{opacity:0}to{opacity:1}}`;
             document.head.appendChild(st);
         }
     }
@@ -146,7 +163,7 @@
     function hideLoadingModal() { elements.loadingModal.classList.add('hidden'); }
     function showError(msg) { elements.errorMessage.textContent = msg; elements.errorModal.classList.remove('hidden'); elements.errorOkBtn.focus(); }
     function hideErrorModal() { elements.errorModal.classList.add('hidden'); }
-    function preloadAssets() { new Image().src = 'lirios.png'; elements.bgMusic.load(); }
+    function preloadAssets() { new Image().src = 'lirios.jpg'; elements.bgMusic.load(); }
 
     const sr = document.createElement('style'); sr.textContent = `.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}`; document.head.appendChild(sr);
     document.addEventListener('visibilitychange', () => { if (document.hidden && state.audioStarted && !state.audioMuted) elements.bgMusic.pause(); else if (!document.hidden && state.audioStarted && !state.audioMuted) elements.bgMusic.play().catch(console.warn); });

@@ -89,3 +89,4 @@ supabase/.temp/
 # !audio/music.mp3
 # !lirios.png
 # !.env.example
+.vercel
