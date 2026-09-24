@@ -35,6 +35,10 @@
         {
           "key": "Permissions-Policy",
           "value": "autoplay=*, clipboard-read=(), clipboard-write=(), fullscreen=*"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
         }
       ]
     },
@@ -44,15 +48,10 @@
         {
           "key": "Accept-Ranges",
           "value": "bytes"
-        }
-      ]
-    },
-    {
-      "source": "/(?:.*)/?",
-      "headers": [
+        },
         {
           "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
+          "value": "public, max-age=3600"
         }
       ]
     }
