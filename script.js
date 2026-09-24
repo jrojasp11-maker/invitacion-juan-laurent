@@ -11,12 +11,12 @@
             url: 'https://kiwstpritxeasvsfwuxk.supabase.co',
             anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtpd3N0cHJpdHhlYXN2c2Z3dXhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNTI3MDMsImV4cCI6MjEwNTgyODcwM30.peAuws0pdwZraHI72eDaabMqbJ-syKGyTlAQFH1Nxg0'
         },
-        audio: { volume: 0.15, loop: true },
+        audio: { volume: 0.1, loop: true },
         confetti: { duration: 3000, particleCount: 150, spread: 100, origin: { y: 0.6 } },
         timing: { redirectDelay: 1500 }
     };
 
-    const state = { audioStarted: false, audioMuted: false, volumeWasMuted: false, movieSelection: null, sushiSelection: null, isSubmitting: false };
+    const state = { audioStarted: false, audioMuted: false, movieSelection: null, sushiSelection: null, isSubmitting: false };
     const elements = {};
 
     document.addEventListener('DOMContentLoaded', init);
@@ -44,7 +44,6 @@
         elements.sushiRadios = document.querySelectorAll('input[name="sushi"]');
         elements.acceptBtn = document.getElementById('accept-btn');
         elements.declineBtn = document.getElementById('decline-btn');
-        elements.volumeControl = document.getElementById('volume-control');
         elements.loadingModal = document.getElementById('loading-modal');
         elements.errorModal = document.getElementById('error-modal');
         elements.errorMessage = document.getElementById('error-message');
@@ -61,7 +60,6 @@
         elements.declineBtn.addEventListener('mouseover', handleDeclineHover);
         elements.declineBtn.addEventListener('touchstart', handleDeclineHover, { passive: true });
         elements.errorOkBtn.addEventListener('click', hideErrorModal);
-        elements.volumeControl.addEventListener('input', handleVolumeChange);
         elements.bgMusic.addEventListener('ended', () => { if (state.audioStarted && !state.audioMuted && CONFIG.audio.loop) { elements.bgMusic.currentTime = 0; elements.bgMusic.play().catch(console.warn); }});
         elements.bgMusic.addEventListener('error', () => elements.audioToggle.style.display = 'none');
     }
@@ -76,17 +74,8 @@
 
     async function startAudio() {
         if (state.audioStarted) return;
-        try { elements.bgMusic.volume = CONFIG.audio.volume; elements.bgMusic.loop = CONFIG.audio.loop; const pct = Math.round(CONFIG.audio.volume * 100); if (elements.volumeControl) { elements.volumeControl.value = pct; elements.volumeControl.style.background = 'linear-gradient(90deg, var(--color-accent) ' + pct + '%, #e0d8cc ' + pct + '%)'; } await elements.bgMusic.play(); state.audioStarted = true; updateAudioIcon(); }
+        try { elements.bgMusic.volume = CONFIG.audio.volume; elements.bgMusic.loop = CONFIG.audio.loop; await elements.bgMusic.play(); state.audioStarted = true; updateAudioIcon(); }
         catch (e) { console.warn('Autoplay bloqueado:', e); }
-    }
-    function handleVolumeChange(e) {
-        const pct = Number(e.target.value);
-        const vol = pct / 100;
-        elements.bgMusic.volume = vol;
-        e.target.style.background = `linear-gradient(90deg, var(--color-accent) ${pct}%, #e0d8cc ${pct}%)`;
-        if (pct === 0 && !state.audioMuted) { elements.bgMusic.pause(); state.audioMuted = true; state.volumeWasMuted = true; }
-        else if (pct > 0 && state.audioMuted && state.volumeWasMuted) { elements.bgMusic.play().catch(console.warn); state.audioMuted = false; state.volumeWasMuted = false; }
-        updateAudioIcon();
     }
     function toggleAudio() { state.audioMuted ? elements.bgMusic.play().catch(console.warn) : elements.bgMusic.pause(); state.audioMuted = !state.audioMuted; updateAudioIcon(); }
     function updateAudioIcon() { elements.audioIconOn.classList.toggle('hidden', state.audioMuted || !state.audioStarted); elements.audioIconOff.classList.toggle('hidden', !(state.audioMuted || !state.audioStarted)); }
