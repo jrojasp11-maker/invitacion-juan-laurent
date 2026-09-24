@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Invitación personalizada de Juan para Laurent">
-    <title>Una cita para ti, Laurent 💌</title>
+    <title>Una película para ti, Laurent 🎬</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=5">
+    <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
     <!-- Botón de audio flotante -->
@@ -57,7 +57,7 @@
         <div class="letter-full" id="letter-full">
             <!-- Header con lirios -->
             <header class="letter-header">
-                <img src="lirios.jpg?v=5" alt="Ramo de lirios asiáticos Landini" class="lirios-image" id="lirios-img" loading="lazy">
+                <img src="lirios.jpg?v=6" alt="Ramo de lirios asiáticos Landini" class="lirios-image" id="lirios-img" loading="lazy">
             </header>
 
             <!-- Contenido principal -->
@@ -71,7 +71,7 @@
 
                 <!-- Selector de película -->
                 <fieldset class="preference-group">
-                    <legend class="preference-label">🎬 Película para la cita</legend>
+                    <legend class="preference-label">🎬 Elige la película</legend>
                     <div class="options-grid" id="movie-options" role="radiogroup" aria-label="Género de película">
                         <label class="option-card" data-value="Terror">
                             <input type="radio" name="movie" value="Terror" class="option-input" aria-label="Terror">
@@ -100,41 +100,10 @@
                     </div>
                 </fieldset>
 
-                <!-- Selector de sushi -->
-                <fieldset class="preference-group">
-                    <legend class="preference-label">🍣 Sushi favorito</legend>
-                    <div class="options-grid" id="sushi-options" role="radiogroup" aria-label="Tipo de sushi">
-                        <label class="option-card" data-value="Roll Acevichado">
-                            <input type="radio" name="sushi" value="Roll Acevichado" class="option-input" aria-label="Roll Acevichado">
-                            <span class="option-emoji">🍣</span>
-                            <span class="option-text">Roll Acevichado</span>
-                            <span class="option-glow"></span>
-                        </label>
-                        <label class="option-card" data-value="Nigiri Salmón">
-                            <input type="radio" name="sushi" value="Nigiri Salmón" class="option-input" aria-label="Nigiri Salmón">
-                            <span class="option-emoji">🍙</span>
-                            <span class="option-text">Nigiri Salmón</span>
-                            <span class="option-glow"></span>
-                        </label>
-                        <label class="option-card" data-value="Tempura">
-                            <input type="radio" name="sushi" value="Tempura" class="option-input" aria-label="Tempura">
-                            <span class="option-emoji">🍱</span>
-                            <span class="option-text">Tempura</span>
-                            <span class="option-glow"></span>
-                        </label>
-                        <label class="option-card" data-value="Maki Especial">
-                            <input type="radio" name="sushi" value="Maki Especial" class="option-input" aria-label="Maki Especial">
-                            <span class="option-emoji">🥢</span>
-                            <span class="option-text">Maki Especial</span>
-                            <span class="option-glow"></span>
-                        </label>
-                    </div>
-                </fieldset>
-
                 <!-- Botones de acción -->
                 <div class="button-group">
                     <button id="accept-btn" class="btn btn-primary" disabled>
-                        <span class="btn-text">¡Acepto la cita! 🍣🎬</span>
+                        <span class="btn-text">¡Acepto! 🎬</span>
                         <span class="btn-shine"></span>
                     </button>
                     <button id="decline-btn" class="btn btn-secondary" aria-label="No, gracias">
@@ -177,6 +146,6 @@
     <!-- Supabase JS Client v2 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Script principal -->
-    <script src="script.js?v=5"></script>
+    <script src="script.js?v=6"></script>
 </body>
 </html>

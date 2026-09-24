@@ -8,11 +8,10 @@ Una invitación web personalizada con experiencia de "sobre 3D" animado, selecci
 
 - **Sobre 3D interactivo** - Animación de apertura con perspectiva CSS 3D
 - **Audio de fondo** - Piano instrumental en loop (respeta políticas de autoplay)
-- **Selectores visuales** - Película (4 géneros) y Sushi (4 tipos) con feedback háptico
+- **Selectores visuales** - Película (4 géneros) con feedback háptico
 - **Botón evasivo** - El botón "No" huye del cursor/touch
 - **Confeti celebratorio** - Animación completa con canvas-confetti
 - **Persistencia Supabase** - Guarda respuestas en PostgreSQL con RLS
-- **Redirección WhatsApp** - Mensaje pre-formateado con selecciones
 - **Totalmente responsive** - Mobile-first, funciona en cualquier dispositivo
 - **Accesible** - ARIA, focus management, prefers-reduced-motion
 
@@ -92,10 +91,6 @@ const CONFIG = {
     supabase: {
         url: 'https://TU-PROYECTO.supabase.co',      // ← Tu URL
         anonKey: 'TU-ANON-KEY-AQUI'                  // ← Tu clave
-    },
-    whatsapp: {
-        phone: '54911XXXXXXXX',                      // ← Tu número
-        message: '¡Hola Juan! Acepto la cita ❤️...'
     }
     // ... resto de config
 };
@@ -138,7 +133,7 @@ CREATE TABLE IF NOT EXISTS respuestas_cita (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMPTZ DEFAULT now(),
   genero_pelicula TEXT NOT NULL,
-  sushi_favorito TEXT NOT NULL,
+  sushi_favorito TEXT,        -- Ya no se solicita en la app (nullable)
   estado TEXT DEFAULT 'Aceptado'
 );
 
@@ -196,7 +191,6 @@ vercel --prod
 3. Configura **Environment Variables** en Vercel:
    - `SUPABASE_URL`
    - `SUPABASE_ANON_KEY`
-   - `WHATSAPP_PHONE`
 
 4. Actualiza `script.js` para leer de `window.ENV` o usa build-time replacement.
 
@@ -251,7 +245,7 @@ Edita directamente en `index.html`:
 - Cuerpo: párrafos con clase `.letter-text`
 - Firma: `<span class="signature-name">Juan</span>`
 
-### Opciones de película/sushi
+### Opciones de película
 
 Modifica los `value` y texto en los `label.option-card` del HTML.
 

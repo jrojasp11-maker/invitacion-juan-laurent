@@ -91,13 +91,21 @@ body::before {
     position: fixed;
     inset: 0;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     padding: var(--space-md);
+    padding-top: calc(var(--space-md) + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--transition-normal), visibility var(--transition-normal);
     z-index: var(--z-envelope);
+}
+
+/* Centra el contenido pero permite hacer scroll si no cabe */
+.screen > * {
+    margin: auto;
 }
 
 .screen.active {
@@ -834,13 +842,40 @@ body::before {
     .audio-toggle {
         width: 48px;
         height: 48px;
-        top: var(--space-sm);
-        right: var(--space-sm);
+        top: calc(var(--space-sm) + env(safe-area-inset-top, 0px));
+        right: calc(var(--space-sm) + env(safe-area-inset-right, 0px));
     }
 
     .btn {
         padding: var(--space-md) var(--space-lg);
         font-size: 1rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .screen {
+        padding: var(--space-sm);
+    }
+
+    .envelope {
+        width: 250px;
+        height: 175px;
+    }
+
+    .letter-header {
+        height: 140px;
+    }
+
+    .letter-body {
+        padding: var(--space-lg) var(--space-sm);
+    }
+
+    .option-card {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .preference-label {
+        font-size: 1.3rem;
     }
 }
 
