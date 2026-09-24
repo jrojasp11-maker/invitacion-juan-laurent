@@ -401,6 +401,16 @@ body::before {
     text-shadow: 0 2px 4px rgba(192, 57, 43, 0.1);
 }
 
+.letter-subtitle {
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-accent-dark);
+    margin: -0.5rem 0 var(--space-md);
+    line-height: 1.4;
+    font-style: italic;
+}
+
 .letter-text {
     font-size: 1.1rem;
     color: var(--color-ink-light);

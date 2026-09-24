@@ -8,18 +8,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=4">
+    <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
     <!-- Botón de audio flotante -->
     <button id="audio-toggle" class="audio-toggle" aria-label="Silenciar música" title="Silenciar/Reproducir música">
-        <svg id="audio-icon-on" class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M11 5v6a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-6"></path>
-            <path d="M19 11a7 7 0 0 1 0 12"></path>
-            <path d="M22 16a10 10 0 0 1 0 12"></path>
+        <svg id="audio-icon-on" class="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
         </svg>
-        <svg id="audio-icon-off" class="audio-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M11 5v6a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-6"></path>
+        <svg id="audio-icon-off" class="audio-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
             <line x1="23" y1="9" x2="17" y2="15"></line>
             <line x1="17" y1="9" x2="23" y2="15"></line>
         </svg>
@@ -57,12 +57,13 @@
         <div class="letter-full" id="letter-full">
             <!-- Header con lirios -->
             <header class="letter-header">
-                <img src="lirios.jpg?v=4" alt="Ramo de lirios asiáticos Landini" class="lirios-image" id="lirios-img" loading="lazy">
+                <img src="lirios.jpg?v=5" alt="Ramo de lirios asiáticos Landini" class="lirios-image" id="lirios-img" loading="lazy">
             </header>
 
             <!-- Contenido principal -->
             <main class="letter-body">
                 <h1 class="letter-title">Para ti, Laurent 💛</h1>
+                <p class="letter-subtitle">eres muy linda 😉</p>
                 
                 <p class="letter-text">
                     Hace tiempo que quiero invitarte a algo especial. 
@@ -182,6 +183,7 @@
     <!-- Supabase JS Client v2 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Script principal -->
-    <script src="script.js?v=4"></script>
+    <script src="script.js?v=5"></script>
 </body>
 </html>
+
